@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.siloenix</groupId>
+    <artifactId>socket-gateway</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <name>socket-gateway</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <slf4jVersion>1.6.1</slf4jVersion>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.8</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4jVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.1.42.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>io.projectreactor.netty</groupId>
+            <artifactId>reactor-netty</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.projectreactor.netty</groupId>
+            <artifactId>reactor-netty-http</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.snksoft</groupId>
+            <artifactId>crc</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.30</version>
+            <scope>runtime</scope>
+        </dependency>
+
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.projectreactor</groupId>
+                <artifactId>reactor-bom</artifactId>
+                <version>Dysprosium-SR16</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>com.siloenix.com.siloenix.socket.SocketApplication</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+                <version>3.1.2</version>
+            </plugin>
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.30.0</version>
+
+                <configuration>
+                    <images>
+                        <image>
+                            <alias>service</alias>
+                            <name>siloenix/kahovka_socket</name>
+
+                            <build>
+                                <from>java:alpine</from>
+                                <assembly>
+                                    <descriptorRef>artifact-with-dependencies</descriptorRef>
+                                </assembly>
+                                <cmd>
+                                    <shell>java -jar /maven/socket-gateway-1.0-SNAPSHOT.jar</shell>
+                                </cmd>
+                            </build>
+
+                            <run>
+                                <ports>
+                                    <port>9999</port>
+                                </ports>
+                            </run>
+                        </image>
+                    </images>
+                </configuration>
+
+                <!-- Connect start/stop to pre- and
+                     post-integration-test phase, respectively if you want to start
+                     your docker containers during integration tests -->
+                <executions>
+                    <execution>
+                        <id>start</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <!-- "build" should be used to create the images with the
+                                 artifact -->
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>stop</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

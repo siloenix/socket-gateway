@@ -21,7 +21,7 @@ jobs:
       - name: maven-settings-xml-action
         uses: whelk-io/maven-settings-xml-action@v14
         with:
-          servers: '[{ "id": "jfrog-snapshots", "username": "siloenix@gmail.com", "password": "${{ secrets.JFROG_PASSWORD }}" },{ "id": "jfrog-releases", "username": "siloenix@gmail.com", "password": "${{ secrets.JFROG_PASSWORD }}" }]'
+          servers: '[{ "id": "jfrog-snapshots", "username": "siloenix@gmail.com", "password": "AP4AbKuxWSL4tuW6jrpsPszvkvz" }, { "id": "jfrog-releases", "username": "siloenix@gmail.com", "password": "${{ secrets.JFROG_PASSWORD }}" }]'
       - name: Build
         run: mvn -s ~/.m2/settings.xml clean install
       - name: Deploy

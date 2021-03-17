@@ -24,7 +24,6 @@ jobs:
       - name: maven-settings-xml-action
         uses: whelk-io/maven-settings-xml-action@v14
         with:
-          properties: '[{"jfrog.password": "${{ secrets.JFROG_PASSWORD }}"}]'
           servers: '[{ "id": "jfrog-snapshot", "username": "siloenix@gmail.com", "password": "${{ secrets.JFROG_PASSWORD }}" }, { "id": "jfrog-release", "username": "siloenix@gmail.com", "password": "${{ secrets.JFROG_PASSWORD }}" }]'
 
       - name: Build

@@ -6,7 +6,7 @@
 
     <groupId>com.siloenix</groupId>
     <artifactId>socket-gateway</artifactId>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.3-SNAPSHOT</version>
 
     <name>socket-gateway</name>
 

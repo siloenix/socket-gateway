@@ -23,7 +23,7 @@ jobs:
         with:
           servers: '[{ "id": "jfrog-snapshots", "username": "siloenix@gmail.com", "password": "${{ secrets.JFROG_PASSWORD }}" },{ "id": "jfrog-releases", "username": "siloenix@gmail.com", "password": "${{ secrets.JFROG_PASSWORD }}" }]'
       - name: Build
-        run: mvn clean install
+        run: mvn -s ~/.m2/settings.xml clean install
       - name: Deploy
         run: mvn -DskipTests=true deploy
         if: github.ref == 'refs/heads/master'

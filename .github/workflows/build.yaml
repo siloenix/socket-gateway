@@ -24,14 +24,12 @@ jobs:
       - name: maven-settings-xml-action
         uses: whelk-io/maven-settings-xml-action@v14
         with:
-          servers: '[{ "id": "jfrog-snapshot", "username": "siloenix@gmail.com", "password": "AP4AbKuxWSL4tuW6jrpsPszvkvz" }, { "id": "jfrog-release", "username": "siloenix@gmail.com", "password": "${{ secrets.JFROG_PASSWORD }}" }]'
-
-      - run: cat /home/runner/.m2/settings.xml
-      - run: cat ~/.m2/settings.xml
+          properties: '[{"jfrog.password": "${{ secrets.JFROG_PASSWORD }}"}]'
+          servers: '[{ "id": "jfrog-snapshot", "username": "siloenix@gmail.com", "password": "${{ secrets.JFROG_PASSWORD }}" }, { "id": "jfrog-release", "username": "siloenix@gmail.com", "password": "${{ secrets.JFROG_PASSWORD }}" }]'
 
       - name: Build
-        run: mvn -s ~/.m2/settings.xml clean install
+        run: mvn clean install
 
       - name: Deploy
-        run: mvn -DskipTests=true deploy
+        run: mvn -DskipTests=true -Djfrog.password=${{ secrets.JFROG_PASSWORD }} deploy
         if: github.ref == 'refs/heads/master'

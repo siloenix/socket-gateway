@@ -3,7 +3,6 @@ package com.siloenix.socket.message;
 import com.siloenix.socket.errors.ErrorCode;
 import com.siloenix.socket.errors.SocketGatewayException;
 import com.siloenix.socket.message.factory.MessageFactory;
-import com.siloenix.aquabox.socket.message.types.*;
 import com.siloenix.socket.message.types.*;
 import lombok.Getter;
 

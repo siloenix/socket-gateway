@@ -2,7 +2,6 @@ package com.siloenix.socket;
 
 import com.siloenix.socket.client.SocketClient;
 import com.siloenix.socket.errors.ErrorCode;
-import com.siloenix.aquabox.socket.message.types.*;
 import com.siloenix.socket.message.types.*;
 
 import java.util.EnumSet;

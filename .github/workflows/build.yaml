@@ -18,6 +18,10 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
+      - name: maven-settings-xml-action
+        uses: whelk-io/maven-settings-xml-action@v14
+        with:
+          servers: '[{ "id": "jfrog-snapshots", "username": "siloenix@gmail.com", "password": "${{ secrets.JFROG_PASSWORD }}" },{ "id": "jfrog-releases", "username": "siloenix@gmail.com", "password": "${{ secrets.JFROG_PASSWORD }}" }]'
       - name: Build
         run: mvn clean install
       - name: Deploy

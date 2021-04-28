@@ -1,7 +1,8 @@
 package com.siloenix.socket.context;
 
 import com.siloenix.socket.message.Message;
-import com.siloenix.socket.Utils;
+import com.siloenix.socket.message.types.BaseMessage;
+import com.siloenix.socket.util.Utils;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 
@@ -39,14 +40,14 @@ public class ConnectionContext {
         addressPerSimId.remove(address);
     }
 
-    public void handleConnectionInitialized(ChannelHandlerContext context, Message message) {
-        initializedConnections.put(message.getSimId(), context);
-        addressPerSimId.put(Utils.socketAddress(context), message.getSimId());
+    public void handleConnectionInitialized(ChannelHandlerContext context, BaseMessage message) {
+        initializedConnections.put(message.getMachineId(), context);
+        addressPerSimId.put(Utils.socketAddress(context), message.getMachineId());
     }
 
-    public void enrichMessageWithSimId(ChannelHandlerContext context, Message message) {
+    public void enrichMessageWithSimId(ChannelHandlerContext context, BaseMessage message) {
         String simId = getSimId(context);
-        message.setSimId(simId);
+        message.setMachineId(simId);
     }
 
     private String getSimId(ChannelHandlerContext context) {
@@ -60,7 +61,7 @@ public class ConnectionContext {
     }
 
     public ChannelHandlerContext getConnection(Message message) {
-        return initializedConnections.get(message.getSimId());
+        return initializedConnections.get(message.getMachineId());
     }
 
     public void cleanUpConnections() {

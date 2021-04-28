@@ -1,6 +1,6 @@
 package com.siloenix.socket.codec;
 
-import com.siloenix.socket.message.Message;
+import com.siloenix.socket.smp.SmpDeserializer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
@@ -11,6 +11,11 @@ import java.util.List;
 
 @Slf4j
 public class ClientMessageDecoder extends ByteToMessageDecoder {
+    private static final int MESSAGE_SIZE_INDEX = 0;
+    private static final int CRC_BYTES_COUNT = 2;
+
+    private MessageDeserializer deserializer = new SmpDeserializer();
+
         @Override
         protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
             log.info("Receiving bytes from: {}", ctx.channel().remoteAddress());
@@ -47,9 +52,11 @@ public class ClientMessageDecoder extends ByteToMessageDecoder {
 //                in.resetWriterIndex();
 //                throw new Error(String.format("Message is longer than declared message size %s > %s", readableBytes, messageSize));
 //            }
-            byte[] bytes = new byte[messageSize];
-            in.readBytes(bytes);
-            log.info("Final bytes received: {}", Arrays.toString(bytes));
-            out.add(Message.deserialize(bytes));
+            byte[] messageBody = new byte[messageSize - CRC_BYTES_COUNT];
+            in.readBytes(messageBody);
+            long messageCrc = in.readChar();
+            log.info("Final bytes received: {}", Arrays.toString(messageBody));
+            log.info("Crc: {}", messageCrc);
+            out.add(deserializer.deserialize(messageBody));
         }
 }

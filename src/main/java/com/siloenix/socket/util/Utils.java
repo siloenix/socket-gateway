@@ -1,4 +1,4 @@
-package com.siloenix.socket;
+package com.siloenix.socket.util;
 
 import io.netty.channel.ChannelHandlerContext;
 

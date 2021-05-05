@@ -31,7 +31,7 @@ public class SmpDeserializer implements MessageDeserializer {
 
     @SneakyThrows
     private <T extends Message<?, ?>> T deserializeByType(ByteBuffer buffer, SmpMessageType type) {
-        Class<T> typeDef = (Class<T>) type.type();
+        Class<T> typeDef = type.type();
         T message = typeDef.newInstance();
 
         for (Field field : typeDef.getDeclaredFields()) {

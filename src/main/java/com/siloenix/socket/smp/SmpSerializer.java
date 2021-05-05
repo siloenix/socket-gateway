@@ -216,7 +216,7 @@ public class SmpSerializer implements MessageSerializer<SmpMessageType> {
     }
 
     @Override
-    public byte[] serialize(Message<?, ? extends SmpMessageType> message) {
+    public <T extends Message<?, ? extends SmpMessageType>> byte[] serialize(T message) {
         ByteBuffer buffer = ByteBuffer.allocate(0xFF);
         SmpMessageType messageType = message.getType();
         Class<? extends Message<?, ?>> typeDef = messageType.type();

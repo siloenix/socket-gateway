@@ -11,10 +11,11 @@ import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 
 import static com.siloenix.socket.util.Utils.asString;
+import static java.lang.reflect.Modifier.isStatic;
 
 public class SmpDeserializer implements MessageDeserializer {
     @Override
-    public Message<?, ?> deserialize(byte[] bytes) {
+    public <T extends Message<?, ?>> T deserialize(byte[] bytes) {
         ByteBuffer buffer = ByteBuffer.wrap(bytes);
         byte messageType = buffer.get();
         SmpMessageType type = SmpTypeRegistry.resolve(messageType);
@@ -29,14 +30,16 @@ public class SmpDeserializer implements MessageDeserializer {
     }
 
     @SneakyThrows
-    private Message<?, ?> deserializeByType(ByteBuffer buffer, SmpMessageType type) {
-        Class<? extends Message<?, ?>> typeDef = type.type();
-        Message<?, ?> message = typeDef.newInstance();
+    private <T extends Message<?, ?>> T deserializeByType(ByteBuffer buffer, SmpMessageType type) {
+        Class<T> typeDef = (Class<T>) type.type();
+        T message = typeDef.newInstance();
 
         for (Field field : typeDef.getDeclaredFields()) {
-            deserializeField(field, message, buffer);
+            if (!isStatic(field.getModifiers())) {
+                deserializeField(field, message, buffer);
+            }
         }
-        return null;
+        return message;
     }
 
     @SneakyThrows
@@ -52,56 +55,56 @@ public class SmpDeserializer implements MessageDeserializer {
         SmpIntFloat smpIntFloat = field.getDeclaredAnnotation(SmpIntFloat.class);
         if (smpIntFloat != null) {
             int value = buffer.getInt();
-            field.set(message, fieldType.cast(value / Math.pow(10, smpIntFloat.precision())));
+            field.set(message, (float) (value / Math.pow(10, smpIntFloat.precision())));
             return;
         }
 
         SmpIntDouble smpIntDouble = field.getDeclaredAnnotation(SmpIntDouble.class);
         if (smpIntDouble != null) {
             int value = buffer.getInt();
-            field.set(message, fieldType.cast(value / Math.pow(10, smpIntDouble.precision())));
+            field.set(message, value / Math.pow(10, smpIntDouble.precision()));
             return;
         }
 
         SmpByte smpByte = field.getDeclaredAnnotation(SmpByte.class);
-        if (smpByte != null || fieldType == byte.class) {
+        if (smpByte != null || fieldType == byte.class || fieldType == Byte.class) {
             byte value = buffer.get();
-            field.set(message, fieldType.cast(value));
+            field.set(message, value);
             return;
         }
 
         SmpChar smpChar = field.getDeclaredAnnotation(SmpChar.class);
-        if (smpChar != null || fieldType == char.class) {
+        if (smpChar != null || fieldType == char.class || fieldType == Character.class) {
             char value = buffer.getChar();
-            field.set(message, fieldType.cast(value));
+            field.set(message, value);
             return;
         }
 
         SmpInteger smpInteger = field.getDeclaredAnnotation(SmpInteger.class);
-        if (smpInteger != null || fieldType == int.class) {
+        if (smpInteger != null || fieldType == int.class || fieldType == Integer.class) {
             int value = buffer.getInt();
-            field.set(message, fieldType.cast(value));
+            field.set(message, value);
             return;
         }
 
         SmpLong smpLong = field.getDeclaredAnnotation(SmpLong.class);
-        if (smpLong != null || fieldType == long.class) {
+        if (smpLong != null || fieldType == long.class || fieldType == Long.class) {
             long value = buffer.getLong();
-            field.set(message, fieldType.cast(value));
+            field.set(message, value);
             return;
         }
 
         SmpFloat smpFloat = field.getDeclaredAnnotation(SmpFloat.class);
-        if (smpFloat != null || fieldType == float.class) {
+        if (smpFloat != null || fieldType == float.class || fieldType == Float.class) {
             float value = buffer.getFloat();
-            field.set(message, fieldType.cast(value));
+            field.set(message, value);
             return;
         }
 
         SmpDouble smpDouble = field.getDeclaredAnnotation(SmpDouble.class);
-        if (smpDouble != null || fieldType == double.class) {
-            float value = buffer.getFloat();
-            field.set(message, fieldType.cast(value));
+        if (smpDouble != null || fieldType == double.class || fieldType == Double.class) {
+            double value = buffer.getDouble();
+            field.set(message, value);
             return;
         }
 

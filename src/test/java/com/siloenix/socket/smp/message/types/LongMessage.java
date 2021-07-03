@@ -21,10 +21,6 @@ public class LongMessage extends BaseMessage {
         super(TestMessageType.LONG_MESSAGE_TYPE);
     }
 
-    public LongMessage(byte[] body) {
-        super(TestMessageType.LONG_MESSAGE_TYPE, body);
-    }
-
     public LongMessage(long simple, Long wrapped) {
         super(TestMessageType.LONG_MESSAGE_TYPE);
         this.simple = simple;

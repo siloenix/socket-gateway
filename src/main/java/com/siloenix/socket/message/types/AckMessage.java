@@ -1,5 +1,7 @@
 package com.siloenix.socket.message.types;
 
+import com.siloenix.socket.message.BaseMessage;
+import com.siloenix.socket.message.BaseMessageType;
 import lombok.ToString;
 
 @ToString(callSuper = true)
@@ -8,12 +10,12 @@ public class AckMessage extends BaseMessage {
 
     private byte code;
 
-    public AckMessage(byte[] body) {
-        super(MessageType.ACK, body);
+    public AckMessage() {
+        super(BaseMessageType.ACK);
     }
 
     public AckMessage(byte code) {
-        super(MessageType.ACK);
+        super(BaseMessageType.ACK);
         this.code = code;
     }
 }

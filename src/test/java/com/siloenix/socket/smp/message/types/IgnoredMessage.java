@@ -19,7 +19,4 @@ public class IgnoredMessage extends BaseMessage {
         super(TestMessageType.IGNORED_MESSAGE_TYPE);
     }
 
-    public IgnoredMessage(byte[] body) {
-        super(TestMessageType.IGNORED_MESSAGE_TYPE, body);
-    }
 }

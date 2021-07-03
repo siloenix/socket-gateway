@@ -24,10 +24,6 @@ public class IntDoubleMessage extends BaseMessage {
         super(TestMessageType.INT_DOUBLE_MESSAGE_TYPE);
     }
 
-    public IntDoubleMessage(byte[] body) {
-        super(TestMessageType.INT_DOUBLE_MESSAGE_TYPE, body);
-    }
-
     public IntDoubleMessage(double simple, Double wrapped) {
         super(TestMessageType.INT_DOUBLE_MESSAGE_TYPE);
         this.simple = simple;

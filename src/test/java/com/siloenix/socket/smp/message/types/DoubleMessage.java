@@ -21,10 +21,6 @@ public class DoubleMessage extends BaseMessage {
         super(TestMessageType.DOUBLE_MESSAGE_TYPE);
     }
 
-    public DoubleMessage(byte[] body) {
-        super(TestMessageType.DOUBLE_MESSAGE_TYPE, body);
-    }
-
     public DoubleMessage(double simple, Double wrapped) {
         super(TestMessageType.DOUBLE_MESSAGE_TYPE);
         this.simple = simple;

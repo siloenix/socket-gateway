@@ -21,10 +21,6 @@ public class CharMessage extends BaseMessage {
         super(TestMessageType.CHAR_MESSAGE_TYPE);
     }
 
-    public CharMessage(byte[] body) {
-        super(TestMessageType.CHAR_MESSAGE_TYPE, body);
-    }
-
     public CharMessage(char simple, Character wrapped) {
         super(TestMessageType.CHAR_MESSAGE_TYPE);
         this.simple = simple;

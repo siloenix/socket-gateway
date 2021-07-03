@@ -1,8 +1,8 @@
 package com.siloenix.socket.communication;
 
-import com.siloenix.socket.message.Message;
+import com.siloenix.socket.message.BaseMessage;
 
 @FunctionalInterface
 public interface MessageHandler {
-    void handle(Message message);
+    void handle(BaseMessage message);
 }

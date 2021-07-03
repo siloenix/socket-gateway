@@ -21,10 +21,6 @@ public class IntMessage extends BaseMessage {
         super(TestMessageType.INT_MESSAGE_TYPE);
     }
 
-    public IntMessage(byte[] body) {
-        super(TestMessageType.INT_MESSAGE_TYPE, body);
-    }
-
     public IntMessage(int simple, Integer wrapped) {
         super(TestMessageType.INT_MESSAGE_TYPE);
         this.simple = simple;

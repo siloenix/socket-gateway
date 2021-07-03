@@ -21,10 +21,6 @@ public class FloatMessage extends BaseMessage {
         super(TestMessageType.FLOAT_MESSAGE_TYPE);
     }
 
-    public FloatMessage(byte[] body) {
-        super(TestMessageType.FLOAT_MESSAGE_TYPE, body);
-    }
-
     public FloatMessage(float simple, Float wrapped) {
         super(TestMessageType.FLOAT_MESSAGE_TYPE);
         this.simple = simple;

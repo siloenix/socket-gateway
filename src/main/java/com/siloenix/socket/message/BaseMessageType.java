@@ -1,18 +1,21 @@
-package com.siloenix.socket.message.types;
+package com.siloenix.socket.message;
 
-import com.siloenix.socket.message.Message;
+import com.siloenix.socket.message.types.AckMessage;
+import com.siloenix.socket.message.types.ErrorMessage;
+import com.siloenix.socket.message.types.FinishMessage;
+import com.siloenix.socket.message.types.StartMessage;
 import com.siloenix.socket.smp.SmpMessageType;
 
-public enum MessageType implements SmpMessageType {
+public enum BaseMessageType implements SmpMessageType {
 
-    ACK(0, AckMessage.class);
-//    ERROR(1, ErrorMessage::new),
+    ACK(0, AckMessage.class),
+    ERROR(1, ErrorMessage.class),
 //    PING(5, PingMessage::new),
 //    SETTINGS(10, SettingsMessage::new),
 //    DEVICE_INFO(11, DeviceInfoMessage::new),
 //
-//    START(20, StartMessage::new),
-//    FINISH(21, FinishMessage::new),
+    START(20, StartMessage.class),
+    FINISH(21, FinishMessage.class);
 //    CASH_PAYMENT(30, CashPaymentMessage::new),
 //    CARD_PAYMENT(31, CardPaymentMessage::new),
 //    CARD_INIT(32, CardInitMessage::new),
@@ -32,7 +35,7 @@ public enum MessageType implements SmpMessageType {
     private final Integer code;
     private final Class<? extends BaseMessage> type;
 
-    MessageType(Integer code, Class<? extends BaseMessage> type) {
+    BaseMessageType(Integer code, Class<? extends BaseMessage> type) {
         this.code = code;
         this.type = type;
     }

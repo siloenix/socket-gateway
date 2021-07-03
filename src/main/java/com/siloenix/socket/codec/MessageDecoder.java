@@ -16,6 +16,7 @@ import java.util.List;
 public class MessageDecoder extends ByteToMessageDecoder {
     private static final int MESSAGE_SIZE_INDEX = 0;
     private static final int CRC_BYTES_COUNT = 2;
+    private static final int LENGTH_BYTES_COUNT = 1;
 
     private final MessageDeserializer deserializer;
 
@@ -55,7 +56,12 @@ public class MessageDecoder extends ByteToMessageDecoder {
             in.resetWriterIndex();
             throw new SocketGatewayException(GatewayErrorCode.BAD_PACKET, String.format("Message is longer than declared message size %s > %s", readableBytes, messageSize));
         }
-        byte[] messageBody = new byte[messageSize - CRC_BYTES_COUNT];
+
+        // todo: fix crc to include length
+        // skip length
+        in.readBytes(LENGTH_BYTES_COUNT);
+
+        byte[] messageBody = new byte[messageSize - CRC_BYTES_COUNT - LENGTH_BYTES_COUNT];
         in.readBytes(messageBody);
         long messageCrc = in.readChar();
         log.info("Final bytes received: {}", Arrays.toString(messageBody));

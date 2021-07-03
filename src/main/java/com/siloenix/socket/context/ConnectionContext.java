@@ -1,7 +1,6 @@
 package com.siloenix.socket.context;
 
-import com.siloenix.socket.message.Message;
-import com.siloenix.socket.message.types.BaseMessage;
+import com.siloenix.socket.message.BaseMessage;
 import com.siloenix.socket.util.Utils;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +20,7 @@ public class ConnectionContext {
 
     private final Map<String, ChannelHandlerContext> connections = new ConcurrentHashMap<>();
     private final Map<String, ChannelHandlerContext> initializedConnections = new ConcurrentHashMap<>();
-    private final Map<String, String> addressPerSimId = new ConcurrentHashMap<>();
+    private final Map<String, String> addressPerMachineId = new ConcurrentHashMap<>();
 
     public void handleConnectionOpened(ChannelHandlerContext context) {
         connections.put(Utils.socketAddress(context), context);
@@ -29,7 +28,7 @@ public class ConnectionContext {
 
     public void handleConnectionClosed(ChannelHandlerContext context) {
         String address = Utils.socketAddress(context);
-        String simId = addressPerSimId.get(address);
+        String simId = addressPerMachineId.get(address);
 
         connections.remove(address);
         if (simId != null) {
@@ -37,37 +36,37 @@ public class ConnectionContext {
         } else {
             initializedConnections.values().removeIf(c -> Utils.socketAddress(c).equals(address));
         }
-        addressPerSimId.remove(address);
+        addressPerMachineId.remove(address);
     }
 
     public void handleConnectionInitialized(ChannelHandlerContext context, BaseMessage message) {
         initializedConnections.put(message.getMachineId(), context);
-        addressPerSimId.put(Utils.socketAddress(context), message.getMachineId());
+        addressPerMachineId.put(Utils.socketAddress(context), message.getMachineId());
     }
 
     public void enrichMessageWithSimId(ChannelHandlerContext context, BaseMessage message) {
-        String simId = getSimId(context);
+        String simId = getMachineId(context);
         message.setMachineId(simId);
     }
 
-    private String getSimId(ChannelHandlerContext context) {
+    private String getMachineId(ChannelHandlerContext context) {
         String address = Utils.socketAddress(context);
-        return addressPerSimId.get(address);
+        return addressPerMachineId.get(address);
     }
 
     public boolean isConnectionInitialized(ChannelHandlerContext ctx) {
-        String simId = getSimId(ctx);
+        String simId = getMachineId(ctx);
         return simId != null && initializedConnections.containsKey(simId);
     }
 
-    public ChannelHandlerContext getConnection(Message message) {
+    public ChannelHandlerContext getConnection(BaseMessage message) {
         return initializedConnections.get(message.getMachineId());
     }
 
     public void cleanUpConnections() {
-        List<String> missingSimIds = addressPerSimId.values().stream()
+        List<String> missingMachineIds = addressPerMachineId.values().stream()
                 .filter(simId -> !initializedConnections.containsKey(simId))
                 .collect(Collectors.toList());
-        log.info("Missing simIds: {}", missingSimIds);
+        log.info("Missing machine ids: {}", missingMachineIds);
     }
 }

@@ -30,7 +30,4 @@ public class CoercedMessage extends BaseMessage {
         super(TestMessageType.COERCED_MESSAGE_TYPE);
     }
 
-    public CoercedMessage(byte[] body) {
-        super(TestMessageType.COERCED_MESSAGE_TYPE, body);
-    }
 }

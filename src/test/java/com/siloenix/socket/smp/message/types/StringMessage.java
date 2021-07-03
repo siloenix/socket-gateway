@@ -22,10 +22,6 @@ public class StringMessage extends BaseMessage {
         super(TestMessageType.STRING_MESSAGE_TYPE);
     }
 
-    public StringMessage(byte[] body) {
-        super(TestMessageType.STRING_MESSAGE_TYPE, body);
-    }
-
     public StringMessage(String simple) {
         super(TestMessageType.STRING_MESSAGE_TYPE);
         this.simple = simple;

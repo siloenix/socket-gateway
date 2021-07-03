@@ -36,10 +36,6 @@ public class MixedMessage extends BaseMessage {
         super(TestMessageType.MIXED_MESSAGE_TYPE);
     }
 
-    public MixedMessage(byte[] body) {
-        super(TestMessageType.MIXED_MESSAGE_TYPE, body);
-    }
-
     public MixedMessage(
             byte byteValue,
             char charValue,

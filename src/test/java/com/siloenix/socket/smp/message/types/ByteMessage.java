@@ -21,10 +21,6 @@ public class ByteMessage extends BaseMessage {
         super(TestMessageType.BYTE_MESSAGE_TYPE);
     }
 
-    public ByteMessage(byte[] body) {
-        super(TestMessageType.BYTE_MESSAGE_TYPE, body);
-    }
-
     public ByteMessage(byte simple, Byte wrapped) {
         super(TestMessageType.BYTE_MESSAGE_TYPE);
         this.simple = simple;

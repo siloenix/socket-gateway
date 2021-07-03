@@ -11,14 +11,14 @@ public enum GatewayErrorCode implements ErrorCode {
     INTERNAL_SERVER_ERROR(251),
     TCP_SERVER_ERROR(252);
 
-    public int code;
+    public byte code;
 
     GatewayErrorCode(int code) {
-        this.code = code;
+        this.code = (byte) code;
     }
 
     @Override
-    public int code() {
+    public byte code() {
         return code;
     }
 }

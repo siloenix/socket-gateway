@@ -7,6 +7,9 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 
 public class MessageEncoder extends MessageToByteEncoder<Message<?, ?>> {
+    public static final int LENGTH_PARAM_SIZE = 1;
+    public static final int CRC_PARAM_SIZE = 2;
+
     private MessageSerializer serializer;
 
     public MessageEncoder(MessageSerializer serializer) {
@@ -17,6 +20,8 @@ public class MessageEncoder extends MessageToByteEncoder<Message<?, ?>> {
     protected void encode(ChannelHandlerContext ctx, Message<?, ?> msg, ByteBuf out) throws Exception {
         out.writeByte(Message.SPECIAL_SYMBOL);
         byte[] messageBody = serializer.serialize(msg);
+        int length = messageBody.length + LENGTH_PARAM_SIZE + CRC_PARAM_SIZE;
+        out.writeByte(length);
         out.writeBytes(messageBody);
         out.writeChar((int) Crc.calculate(messageBody));
     }
